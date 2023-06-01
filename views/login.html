@@ -17,9 +17,9 @@
             color: rgb(36, 82, 134);
             padding: 1rem;
         }
-        #errmsg{
+        /* #errmsg{
             color: red;
-        }
+        } */
     </style>
 </head>
 <body>
@@ -46,29 +46,34 @@
         const password = document.getElementById('password');
         const login = document.getElementById('submit');
         const signup = document.getElementById('signup');
+        const p = document.getElementById('errmsg');
+
         myForm.addEventListener('submit', onSubmit);
         
         function onSubmit(e){
             e.preventDefault();
+            const p = document.getElementById('errmsg');
             if(email.value==='' || password.value=== ''){
                 alert('Enter the values!');
             }
             else{
                 let myObj = {
-                    // username:username.value,
                     email:email.value,
                     password:password.value
                 }
                 axios
                 .post('http://localhost:8000/user/login', myObj)
                 .then(response=>{
-                    // showObjOnScreen(response.data.newExpense);
-                    console.log(response);
+                    if(response.status === 201){
+                        p.style.color='green';
+                        p.textContent=`${response.data.message}`;
+                        // alert(response.data.message);
+                    }
                 })
-                .catch((err)=>{
-                    console.log(err.message);
-                    let p = document.getElementById('errmsg');
-                    p.appendChild(document.createTextNode(`User Already Exists! Try logging in.`));
+                .catch((err)=>{ 
+                    p.style.color='red';
+                    p.textContent=`${err.response.data.message}`;
+                    // p.appendChild(document.createTextNode(`${err.response.data.message}`));
                 });
             }       
         }
