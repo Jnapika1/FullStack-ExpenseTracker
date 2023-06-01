@@ -1,22 +1,34 @@
 const User = require('../models/userdetails');
+const bcrypt = require('bcrypt');
+
 exports.postSignupUser = async (req, res, next)=>{
     const username = req.body.username;
     const email = req.body.email;
     const password = req.body.password;
 
-    let users = User.findAll();
+    let user = User.findAll({where: {username: username}});
+    let saltrounds =10;
 
     try{
-        let user =await User.create({
-            username: username,
-            email: email,
-            password: password
-          })
-          res.status(201).json({newUSer: user});
+        if(user!=null){
+            res.status(409).json({success: false, message: 'Error: User already exists!!'})
+        }
+        else{
+        bcrypt.hash(password, saltrounds, async (err, hash)=>{
+            let user =await User.create({
+                username: username,
+                email: email,
+                password: hash
+              })
+              res.status(201).json({success: true, message: 'Successfully signed up!!'});
+        })
+    }
+    
+        
     }
     catch(err){
         // console.log(err);
-        res.status(403).send({message: 'Error: user already exists!!'});
+        res.status(500).json({success: false, message:err});
     }
 }
 

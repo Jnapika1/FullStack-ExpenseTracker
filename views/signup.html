@@ -38,7 +38,7 @@
         </form>
         <br>
             <span>Existing User ? </span><a><button type="button" class="btn btn-success" id="login">Login</button></a>
-            <p id="errmsg"></p>
+            <p id="msg"></p>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
@@ -49,6 +49,8 @@
         const password = document.getElementById('password');
         const signup = document.getElementById('submit');
         const login = document.getElementById('login');
+        const p = document.getElementById('msg');
+
         myForm.addEventListener('submit', onSubmit);
         
         function onSubmit(e){
@@ -66,12 +68,15 @@
                 .post('http://localhost:8000/user/signup', myObj)
                 .then(response=>{
                     // showObjOnScreen(response.data.newExpense);
-                    console.log(response);
+                    p.style.color='green';
+                    p.textContent=`${response.data.message}`;
+                    // console.log(response);
                 })
                 .catch((err)=>{
-                    console.log(err.message);
-                    let p = document.getElementById('errmsg');
-                    p.appendChild(document.createTextNode(`User Already Exists! Try logging in.`));
+                    // console.log(err);
+                    // console.log(err.response.data.message);
+                    p.style.color='red';
+                    p.textContent=`${err.response.data.message}`;
                 });
             }       
         }
