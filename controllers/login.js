@@ -15,6 +15,7 @@ exports.postUserLogin = async (req, res, next)=>{
                 }
                 if(result===true){
                     res.status(201).json({success : true, message: 'User logged in successfully!'});
+                    // res.redirect('../views/expense.html');
                 }
                 else{
                     res.status(401).json({success:false, message: 'Incorrect Password!'});
