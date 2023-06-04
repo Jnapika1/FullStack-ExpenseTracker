@@ -70,6 +70,7 @@
                     // showObjOnScreen(response.data.newExpense);
                     p.style.color='green';
                     p.textContent=`${response.data.message}`;
+                    window.location.replace('../views/login.html');
                     // console.log(response);
                 })
                 .catch((err)=>{

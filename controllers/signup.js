@@ -10,7 +10,7 @@ exports.postSignupUser = async (req, res, next)=>{
     let saltrounds =10;
 
     try{
-        if(user!=null){
+        if(user[0]!=null){
             res.status(409).json({success: false, message: 'Error: User already exists!!'})
         }
         else{

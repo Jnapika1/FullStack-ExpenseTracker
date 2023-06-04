@@ -68,7 +68,8 @@
         const ul=document.getElementById("list-group");
 
         window.addEventListener('DOMContentLoaded', ()=>{
-            axios.get('http://localhost:8000/expense/getexpense')
+            const token = localStorage.getItem('tokenKey');
+            axios.get('http://localhost:8000/expense/getexpense', {headers: {"Authorization": token}})
             .then(response=>{
             for(let i=0;i<response.data.allExpenses.length;i++){
                 showObjOnScreen(response.data.allExpenses[i]);
@@ -84,6 +85,7 @@
 
         function onSubmit(e){
             e.preventDefault();
+            const token = localStorage.getItem('tokenKey');
             if(expAmt.value==='' || desc.value==='' || cat.value=== ''){
                 alert('Enter the values!');
             }
@@ -94,7 +96,7 @@
                     cg:cat.value
                 }
                 axios
-                .post('http://localhost:8000/expense/addexpense', myObj)
+                .post('http://localhost:8000/expense/addexpense', myObj, {headers: {"Authorization": token}})
                 .then(response=>{
                     showObjOnScreen(response.data.newExpense);
                     // console.log(response)
@@ -128,8 +130,9 @@
             if(e.target.classList.contains('delete')){
                 let user = e.target.parentElement;
                 ul.removeChild(user);
+                const token = localStorage.getItem('tokenKey');
 
-                axios.get('http://localhost:8000/expense/getexpense')
+                axios.get('http://localhost:8000/expense/getexpense', {headers: {"Authorization": token}})
                 .then(response=>{
                     for(let i=0;i<response.data.allExpenses.length;i++){
                         if(response.data.allExpenses[i].description===user.firstChild.textContent){
@@ -151,7 +154,7 @@
                 let user = e.target.parentElement;
                 ul.removeChild(user);
 
-                axios.get('http://localhost:8000/expense/getexpense')
+                axios.get('http://localhost:8000/expense/getexpense', {headers: {"Authorization": token}})
                 .then(response=>{
                     for(let i=0;i<response.data.allExpenses.length;i++){
                         if(response.data.allExpenses[i].description===user.firstChild.textContent){

@@ -1,5 +1,10 @@
 const User = require('../models/userdetails');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+function generateAccessToken(id){
+    return jwt.sign({userId: id}, '9a4i9s3h3w5a8r2y6a3j77n29a0p7i1k5a01')
+}
 
 exports.postUserLogin = async (req, res, next)=>{
     const email = req.body.email;
@@ -14,7 +19,7 @@ exports.postUserLogin = async (req, res, next)=>{
                     throw new Error('Something went wrong');
                 }
                 if(result===true){
-                    res.status(201).json({success : true, message: 'User logged in successfully!'});
+                    res.status(201).json({success : true, message: 'User logged in successfully!', token: generateAccessToken(emailExists.id)});
                     // res.redirect('../views/expense.html');
                 }
                 else{

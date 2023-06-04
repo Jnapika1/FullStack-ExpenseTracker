@@ -6,6 +6,9 @@ const bodyParser = require('body-parser');
 
 const sequelize = require('./util/database');
 
+const User = require('./models/userdetails');
+const Expense = require('./models/expensedetails');
+
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -19,6 +22,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
 app.use(userRoutes);
+
+User.hasMany(Expense);
+Expense.belongsTo(User, {
+    constraints: true,
+    onDelete: 'CASCADE'
+})
 
 sequelize.sync()
 .then(result=>{

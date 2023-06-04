@@ -65,6 +65,8 @@
                 .post('http://localhost:8000/user/login', myObj)
                 .then(response=>{
                     alert(`${response.data.message}`);
+                    console.log(response.data);
+                    localStorage.setItem('tokenKey', response.data.token);
                     window.location.replace('E:/Aishu/FullStack ExpenseTracker App/views/expense.html')
                     // if(response.status === 201){
                     //     p.style.color='green';
