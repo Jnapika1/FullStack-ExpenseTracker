@@ -59,6 +59,19 @@ catch(err){
 }
 }
 
+const failedTransaction = async(req, res)=>{
+    try{
+        const{payment_id, order_id} = req.body;
+        const order = await Order.findOne({where: {orderid: order_id}});
+        await order.update({paymentid: payment_id, status: 'FAILED'});
+        res.status(202).json({success: false, message: "Transcation Failed"});
+    }
+    catch(err){
+        console.log(err);
+        res.status(403).json({message: 'Something went wrong', error: err});
+    }
+}
+
 module.exports= {
-    purchasepremium, updateTransaction
+    purchasepremium, updateTransaction, failedTransaction
 }

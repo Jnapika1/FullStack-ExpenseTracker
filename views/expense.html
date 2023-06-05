@@ -204,9 +204,14 @@
                 }
             }
             var rzp1 = new Razorpay(options);
-            rzp1.on('payment.failed', function (response){
-                console.log(response);
-                alert('transcation failed');
+            rzp1.on('payment.failed', async function (response){
+                // console.log(response);
+                // console.log(response.error.metadata.payment_id);
+                await axios.post('http://localhost:8000/purchase/failedtransaction', {
+                    order_id: options.order_id,
+                    payment_id:response.error.metadata.payment_id,
+                }, {headers: {"Authorization": token}})
+                alert('Transcation failed. Please try again!');
             })
             rzp1.open();
             e.preventDefault();
