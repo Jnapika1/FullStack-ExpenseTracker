@@ -5,7 +5,7 @@ const User = require('../models/userdetails');
 exports.getExpenses = async (req, res, next)=>{
     try{
        let expenses = await Expense.findAll({where:{userId:req.user.id}})
-    res.status(200).json({allExpenses: expenses});
+     res.status(200).json({allExpenses: expenses, premiumUser: req.user.ispremium});
     }
     
     catch(err){

@@ -8,6 +8,7 @@ const sequelize = require('./util/database');
 
 const User = require('./models/userdetails');
 const Expense = require('./models/expensedetails');
+const Order = require('./models/order');
 
 const app = express();
 
@@ -28,6 +29,9 @@ Expense.belongsTo(User, {
     constraints: true,
     onDelete: 'CASCADE'
 })
+
+User.hasMany(Order);
+Order.belongsTo(User);
 
 sequelize.sync()
 .then(result=>{
