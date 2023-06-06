@@ -10,6 +10,8 @@ const userAuthentication = require('../middleware/auth');
 const purchaseController = require('../controllers/purchase')
 const dashboardController = require('../controllers/dashboard');
 
+const passwordController = require('../controllers/password')
+
 router.post('/user/signup', userController.postSignupUser);
 
 router.post('/user/login', loginController.postUserLogin);
@@ -24,5 +26,7 @@ router.get('/purchase/premiummembership', userAuthentication.authenticate, purch
 router.post('/purchase/updatetransactionstatus', userAuthentication.authenticate, purchaseController.updateTransaction);
 router.post('/purchase/failedtransaction', userAuthentication.authenticate, purchaseController.failedTransaction);
 router.get('/purchase/showdashboard',userAuthentication.authenticate, dashboardController.showDashboard);
+
+router.post('/password/forgotpassword', passwordController.forgotpassword)
 
 module.exports=router;
