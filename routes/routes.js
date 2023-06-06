@@ -18,7 +18,7 @@ router.get('/expense/getexpense', userAuthentication.authenticate, expenseContro
 
 router.post('/expense/addexpense', userAuthentication.authenticate, expenseController.postExpense);
 
-router.delete('/expense/deleteexpense/:id', expenseController.deleteExpense);
+router.delete('/expense/deleteexpense/:id', userAuthentication.authenticate, expenseController.deleteExpense);
 
 router.get('/purchase/premiummembership', userAuthentication.authenticate, purchaseController.purchasepremium);
 router.post('/purchase/updatetransactionstatus', userAuthentication.authenticate, purchaseController.updateTransaction);

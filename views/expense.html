@@ -180,7 +180,7 @@
                     for(let i=0;i<response.data.allExpenses.length;i++){
                         if(response.data.allExpenses[i].description===user.firstChild.textContent){
                             axios
-                            .delete(`http://localhost:8000/expense/deleteexpense/${response.data.allExpenses[i].id}`)
+                            .delete(`http://localhost:8000/expense/deleteexpense/${response.data.allExpenses[i].id}`, {headers: {"Authorization": token}})
                             .catch(err=>console.log(err));
                         }
                     }
@@ -206,7 +206,7 @@
                             desc.value=response.data.allExpenses[i].description;
                             cat.value=response.data.allExpenses[i].category;
                             axios
-                            .delete(`http://localhost:8000/expense/deleteexpense/${response.data.allExpenses[i].id}`)
+                            .delete(`http://localhost:8000/expense/deleteexpense/${response.data.allExpenses[i].id}`, {headers: {"Authorization": token}})
                             .catch(err=>console.log(err));
                         }
                     }
