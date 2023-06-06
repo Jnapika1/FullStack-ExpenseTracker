@@ -27,6 +27,9 @@ router.post('/purchase/updatetransactionstatus', userAuthentication.authenticate
 router.post('/purchase/failedtransaction', userAuthentication.authenticate, purchaseController.failedTransaction);
 router.get('/purchase/showdashboard',userAuthentication.authenticate, dashboardController.showDashboard);
 
+
+router.get('/password/resetpassword/:id', passwordController.resetpassword);
+router.get('/password/updatepassword/:resetpasswordid', passwordController.updatepassword)
 router.post('/password/forgotpassword', passwordController.forgotpassword)
 
 module.exports=router;
