@@ -1,6 +1,7 @@
 const Razorpay = require('razorpay');
 const Order = require('../models/order');
 require('dotenv').config();
+const userController = require('./login');
 
 
 const purchasepremium = async(req, res)=>{
@@ -35,7 +36,7 @@ const updateTransaction = async(req, res)=>{
         const order = await Order.findOne({where: {orderid: order_id}});
         await order.update({paymentid: payment_id, status: 'SUCCESSFUL'});
         await req.user.update({ispremium: true});
-        res.status(202).json({success: true, message: "Transcation Successful"});
+        res.status(202).json({success: true, message: "Transcation Successful", token: userController.generateAccessToken(userId, undefined, true)});
 
 
         // Order.findOne({where: {orderid: order_id}}).then(order=>{

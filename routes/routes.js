@@ -23,6 +23,6 @@ router.delete('/expense/deleteexpense/:id', expenseController.deleteExpense);
 router.get('/purchase/premiummembership', userAuthentication.authenticate, purchaseController.purchasepremium);
 router.post('/purchase/updatetransactionstatus', userAuthentication.authenticate, purchaseController.updateTransaction);
 router.post('/purchase/failedtransaction', userAuthentication.authenticate, purchaseController.failedTransaction);
-router.get('/purchase/showdashboard', dashboardController.showDashboard);
+router.get('/purchase/showdashboard',userAuthentication.authenticate, dashboardController.showDashboard);
 
 module.exports=router;

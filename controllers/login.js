@@ -3,11 +3,11 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-function generateAccessToken(id){
-    return jwt.sign({userId: id}, process.env.TOKEN_KEY)
+function generateAccessToken(id, username, ispremium){
+    return jwt.sign({userId: id, name:username, ispremium}, process.env.TOKEN_KEY)
 }
 
-exports.postUserLogin = async (req, res, next)=>{
+const postUserLogin = async (req, res, next)=>{
     const email = req.body.email;
     const password = req.body.password;
     
@@ -20,7 +20,7 @@ exports.postUserLogin = async (req, res, next)=>{
                     throw new Error('Something went wrong');
                 }
                 if(result===true){
-                    res.status(201).json({success : true, message: 'User logged in successfully!', token: generateAccessToken(emailExists.id)});
+                    res.status(201).json({success : true, message: 'User logged in successfully!', token: generateAccessToken(emailExists.id, emailExists.username, emailExists.ispremium)});
                     // res.redirect('../views/expense.html');
                 }
                 else{
@@ -37,3 +37,4 @@ exports.postUserLogin = async (req, res, next)=>{
     }
     
 }
+module.exports={generateAccessToken, postUserLogin};
