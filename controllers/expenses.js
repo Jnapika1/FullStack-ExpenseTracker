@@ -14,19 +14,21 @@ exports.getExpenses = async (req, res, next)=>{
 };
 
 exports.postExpense = async (req, res, next) => {
-    console.log(req.user);
+    // console.log(req.user);
     let amt =  req.body.amt;
     let desc = req.body.des;
     let category = req.body.cg;
-    // const user = User.findByPk(req.user.id);
+    const user = User.findByPk(req.user.id);
     // console.log(name);
     try{
         let expense =await Expense.create({
             amount: amt,
             description: desc,
             category: category,
-            userId : req.user.id
+            userId : req.user.id,
+            
           })
+          await req.user.update({totalExpense: req.user.totalExpense+JSON.parse(amt)});
           res.status(201).json({newExpense: expense});
     }
     catch(err){
