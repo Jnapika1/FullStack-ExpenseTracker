@@ -64,6 +64,7 @@ const failedTransaction = async(req, res)=>{
         const{payment_id, order_id} = req.body;
         const order = await Order.findOne({where: {orderid: order_id}});
         await order.update({paymentid: payment_id, status: 'FAILED'});
+        await req.user.update({ispremium: false});
         res.status(202).json({success: false, message: "Transcation Failed"});
     }
     catch(err){

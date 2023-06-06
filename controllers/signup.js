@@ -18,7 +18,8 @@ exports.postSignupUser = async (req, res, next)=>{
             let user =await User.create({
                 username: username,
                 email: email,
-                password: hash
+                password: hash,
+                ispremium: false
               })
               res.status(201).json({success: true, message: 'Successfully signed up!!'});
         })

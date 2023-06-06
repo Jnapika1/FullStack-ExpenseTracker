@@ -22,6 +22,14 @@
             padding: 1em;
             margin: 2% 25% 2% 25%;
         }
+        p{
+            font-style: italic;
+            font-weight:600;
+            font-size: large;
+            text-align: right;
+            margin: 2% 0;
+
+        }
         /* button{
             margin: 4px 2px;
         } */
@@ -55,11 +63,18 @@
             <br>
         </form>
         <button id="rzr-btn" class="btn btn-sm btn-primary mt-2 float-right">Buy Premium</button>
+        <p id="premium"></p>
+        <button id="db_button">Show dashboard</button>
     
    </div>
 
     <div id="list-div">
+        <h1>Your Expenses</h1>
         <ul id="list-group"></ul>
+    </div>
+    <div id="dashboard-div">
+        <h2 id="leaderboard_h2"></h2>
+        <ul id="leaderboard-group"></ul>
     </div>
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -72,6 +87,10 @@
         const cat = document.querySelector('#select');
         const ul=document.getElementById("list-group");
         const rzr = document.getElementById('rzr-btn');
+        const p = document.getElementById('premium');
+        const div = document.getElementById('db');
+
+        console.log(document.getElementById('rzr-btn'));
 
         window.addEventListener('DOMContentLoaded', ()=>{
             const token = localStorage.getItem('tokenKey');
@@ -81,7 +100,15 @@
                 if(response.data.premiumUser===true){   
                     // rzr.style.visibility = "hidden";
                     // rzr.disabled = "true";   
-                    rzr.remove();               
+                    rzr.remove(); 
+                    p.textContent="Premium User";
+                    p.style.color="rgb(218,165,32)"  
+                    // const bt = document.createElement('button');
+                    // bt.appendChild(document.createTextNode('Show Dashboard'));
+                    // div.appendChild(bt);
+                    // bt.className ="btn btn-sm btn-primary mt-2 db_button";
+                    // bt.id="dashboard"
+
                 }
             for(let i=0;i<response.data.allExpenses.length;i++){
                 showObjOnScreen(response.data.allExpenses[i]);
@@ -186,6 +213,8 @@
             }
         }
 
+        
+
         document.getElementById('rzr-btn').onclick = async function(e){
             const token = localStorage.getItem('tokenKey');
             const response = await axios.get('http://localhost:8000/purchase/premiummembership', {headers: {"Authorization": token}});
@@ -215,6 +244,21 @@
             })
             rzp1.open();
             e.preventDefault();
+        }
+        const dbButton = document.getElementById('db_button');
+        console.log(dbButton);
+        dbButton.onclick = async function(e){
+            const response = await axios.get('http://localhost:8000/purchase/showdashboard')
+            console.log(response.data[1].totalExpense);
+            response.data.forEach(arr => {
+                // if(arr.totalExpense===undefined){
+                //     arr.totalExpense=0;
+                // }
+                const li = document.createElement('li');
+                li.appendChild(document.createTextNode(`${arr.name} - ${arr.totalExpense}`))
+                document.getElementById('leaderboard-group').appendChild(li)
+            });
+            
         }
         
 

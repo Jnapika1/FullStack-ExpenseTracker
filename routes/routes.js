@@ -8,6 +8,7 @@ const loginController = require('../controllers/login');
 const expenseController = require('../controllers/expenses');
 const userAuthentication = require('../middleware/auth');
 const purchaseController = require('../controllers/purchase')
+const dashboardController = require('../controllers/dashboard');
 
 router.post('/user/signup', userController.postSignupUser);
 
@@ -22,5 +23,6 @@ router.delete('/expense/deleteexpense/:id', expenseController.deleteExpense);
 router.get('/purchase/premiummembership', userAuthentication.authenticate, purchaseController.purchasepremium);
 router.post('/purchase/updatetransactionstatus', userAuthentication.authenticate, purchaseController.updateTransaction);
 router.post('/purchase/failedtransaction', userAuthentication.authenticate, purchaseController.failedTransaction);
+router.get('/purchase/showdashboard', dashboardController.showDashboard);
 
 module.exports=router;
