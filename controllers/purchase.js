@@ -33,6 +33,7 @@ const purchasepremium = async(req, res)=>{
 const updateTransaction = async(req, res)=>{
     try{
         const{payment_id, order_id} = req.body;
+        const userId = req.user.id;
         const order = await Order.findOne({where: {orderid: order_id}});
         await order.update({paymentid: payment_id, status: 'SUCCESSFUL'});
         await req.user.update({ispremium: true});

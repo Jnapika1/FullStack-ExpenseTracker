@@ -16,7 +16,7 @@
             padding: 1em;
             margin: 2% 25% 2% 25%;
         }
-        #list-div, #dashboard-div{
+        #list-div, #dashboard-div, #history-div{
             /* background-color: rgb(148, 149, 151); */
             /* border: 2px solid black; */
             padding: 1em;
@@ -62,12 +62,17 @@
             <input type="submit" id="addExp" name="submit" value="Add Expense" class="btn btn-sm btn-success mt-2">
             <br>
         </form>
+        <button onclick="download()" id="downloadexpense" class="btn btn-sm btn-primary mt-2" style="visibility: hidden;">Download Expenses</button>
         <button id="rzr-btn" class="btn btn-sm btn-primary mt-2 float-right">Buy Premium</button>
         <p id="premium"></p>
         <button id="db_button" hidden="hidden" class="btn btn-sm btn-primary mt-2">Show dashboard</button>
     
    </div>
 
+   <div id="history-div" style="visibility: hidden;">
+        <h3>Download History</h3>
+        <ul id="history-group"></ul>
+    </div>
     <div id="list-div">
         <h3>Your Expenses</h3>
         <ul id="list-group"></ul>
@@ -90,7 +95,9 @@
         const p = document.getElementById('premium');
         const div = document.getElementById('db');
         const dbButton = document.getElementById('db_button');
-
+        const downloadbtn = document.getElementById('downloadexpense');
+        const history=document.getElementById("history-group");
+        
         // console.log(document.getElementById('rzr-btn'));
 
         window.addEventListener('DOMContentLoaded', ()=>{
@@ -101,11 +108,14 @@
                 if(response.data.premiumUser===true){   
                     // rzr.style.visibility = "hidden";
                     // rzr.disabled = "true";   
-                    rzr.style.visibility = "hidden" 
+                    rzr.style.visibility = "hidden" ;
+                    downloadbtn.style.visibility="visible";
 
                     p.textContent="Premium User";
                     p.style.color="rgb(218,165,32)" ;
-                    dbButton.hidden=""
+                    dbButton.hidden="";
+
+                    
 
                     // const bt = document.createElement('button');
                     // bt.appendChild(document.createTextNode('Show Dashboard'));
@@ -250,6 +260,34 @@
             e.preventDefault();
         }
        
+        function download(){
+            const token = localStorage.getItem('tokenKey');
+            axios.get('http://localhost:8000/user/download', { headers: {"Authorization" : token} })
+            .then((response) => {
+                if(response.status === 201){
+                    document.getElementById('history-div').style.visibility="visible"
+                    // console.log(response);
+                    for(let i=0;i<response.data.filehistory.length;i++){
+                        let li = document.createElement('li');
+                        let a = document.createElement("a");
+                        a.href = response.data.filehistory[i].url;
+                        a.appendChild(document.createTextNode(`${new Date(response.data.filehistory[i].date)}`));
+                        a.download = `${response.data.filehistory[i].date}.csv`;
+                        li.append(a);
+                        history.append(li);
+                    // a.click();
+                    //     showObjOnScreen(response.data.allExpenses[i]);
+                    }
+                } else {
+                    throw new Error(response.data.message)
+                }
+
+            })
+            .catch((err) => {
+                console.log(err)
+            });
+        }
+
         // console.log(dbButton);
         dbButton.onclick = async function(e){
             

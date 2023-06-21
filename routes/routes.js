@@ -22,6 +22,8 @@ router.post('/expense/addexpense', userAuthentication.authenticate, expenseContr
 
 router.delete('/expense/deleteexpense/:id', userAuthentication.authenticate, expenseController.deleteExpense);
 
+router.get('/user/download', userAuthentication.authenticate, expenseController.downloadExpense );
+
 router.get('/purchase/premiummembership', userAuthentication.authenticate, purchaseController.purchasepremium);
 router.post('/purchase/updatetransactionstatus', userAuthentication.authenticate, purchaseController.updateTransaction);
 router.post('/purchase/failedtransaction', userAuthentication.authenticate, purchaseController.failedTransaction);
