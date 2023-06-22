@@ -32,21 +32,23 @@ exports.downloadExpense = async(req, res)=>{
 
 exports.getExpenses = async (req, res, next)=>{
     try{
+        const rows =JSON.parse(req.header('rows'));
+        console.log(rows);
         const page = +req.query.page || 1;
         let totalItems = await Expense.count({where:{userId:req.user.id}});
         let expenses = await Expense.findAll({
             where:{userId:req.user.id},
-            offset: (page-1)*2,
-            limit:2
+            offset: (page-1)*rows,
+            limit:rows
             });
         res.status(200).json({
             expenses: expenses,
             currentPage: page,
-            hasNextPage: 2*page<totalItems,
+            hasNextPage: rows*page<totalItems,
             nextPage: page+1,
             hasPreviousPage: page>1,
             previousPage: page-1,
-            lastPage: Math.ceil(totalItems/2),
+            lastPage: Math.ceil(totalItems/rows),
             premiumUser: req.user.ispremium
         });
     }
