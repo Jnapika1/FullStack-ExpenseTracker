@@ -23,17 +23,32 @@ exports.downloadExpense = async(req, res)=>{
     let filehistory = await File.findAll({where:{userId:req.user.id}});
     // console.log(filehistory);
     res.status(201).json({filehistory, success:true})
-}
-catch(err){
-    console.log(err);
-    res.status(500).json({filehistory:'', success: false, err:err});
-}
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json({filehistory:'', success: false, err:err});
+    }
 }
 
 exports.getExpenses = async (req, res, next)=>{
     try{
-       let expenses = await Expense.findAll({where:{userId:req.user.id}})
-     res.status(200).json({allExpenses: expenses, premiumUser: req.user.ispremium});
+        const page = +req.query.page || 1;
+        let totalItems = await Expense.count({where:{userId:req.user.id}});
+        let expenses = await Expense.findAll({
+            where:{userId:req.user.id},
+            offset: (page-1)*2,
+            limit:2
+            });
+        res.status(200).json({
+            expenses: expenses,
+            currentPage: page,
+            hasNextPage: 2*page<totalItems,
+            nextPage: page+1,
+            hasPreviousPage: page>1,
+            previousPage: page-1,
+            lastPage: Math.ceil(totalItems/2),
+            premiumUser: req.user.ispremium
+        });
     }
     
     catch(err){
