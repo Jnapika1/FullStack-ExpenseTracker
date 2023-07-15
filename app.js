@@ -1,5 +1,8 @@
 const path = require('path');
 const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const fs = require('fs');
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -18,6 +21,11 @@ app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 const userRoutes = require('./routes/routes');
+
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {flags:'a'});
+
+app.use(helmet());
+app.use(morgan('combined', {stream: accessLogStream}));
 
 app.use(bodyParser.json({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
