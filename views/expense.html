@@ -155,7 +155,7 @@
         })
 
         function store(rows){
-            localStorage.setItem('rows', rows.value);
+            localStorage.setItem('rows', rows.value||2);
             window.location.replace('../expense.html');
         }
         
