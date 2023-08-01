@@ -8,7 +8,7 @@ const Forgotpassword = require('../models/forgotpassword');
 
 const forgotpassword = async (req, res) => {
     try {
-        console.log(req);
+        // console.log(req);
         const { email } =  req.body;
         const user = await User.findOne({where : { email }});
         if(user){

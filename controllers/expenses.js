@@ -32,7 +32,7 @@ exports.downloadExpense = async(req, res)=>{
 
 exports.getExpenses = async (req, res, next)=>{
     try{
-	    console.log(req);
+	    // console.log(req);
         const rows =JSON.parse(req.header('rows'));
         console.log(rows);
         const page = +req.query.page || 1;
